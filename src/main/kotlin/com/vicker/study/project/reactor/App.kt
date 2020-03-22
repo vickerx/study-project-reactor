@@ -12,4 +12,5 @@ class App {
 
 fun main(args: Array<String>) {
     println(App().greeting)
+    MonoBasicUsage.execute()
 }
