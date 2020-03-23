@@ -6,7 +6,7 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.function.Supplier
 
-object MonoBasicUsage {
+object MonoCreationUsage {
 
     private fun just() {
         start("just")
@@ -24,6 +24,7 @@ object MonoBasicUsage {
         end()
     }
 
+    //从Supplier接口中创建mono
     private fun fromSupplier() {
         start("from supplier")
         Mono.fromSupplier(fun(): String {
@@ -42,24 +43,36 @@ object MonoBasicUsage {
         end()
     }
 
+    /**
+     * 从一个Publisher中创建mono
+     */
     private fun from() {
         start("from")
         Mono.from(Mono.just("from")).subscribe(::println)
         end()
     }
 
+    /**
+     * 从callable接口中创建mono，未发现与Supplier有啥区别，源码实现也一样
+     */
     private fun fromCallable() {
         start("from callable")
         Mono.fromCallable { "from callable hello world" }.subscribe(::println)
         end()
     }
 
+    /**
+     * 创建空的mono，completes时执行runnable
+     */
     private fun fromRunnable() {
         start("from runnable")
         Mono.fromRunnable<String> { println("from runnable hello world") }.subscribe()
         end()
     }
 
+    /**
+     * 从CompletableFuture中获取，异步的
+     */
     private fun fromFuture() {
         start("from future")
         Mono.fromFuture { CompletableFuture.supplyAsync { "from future hello world with supply async and lambda" } }.subscribe(::println)
