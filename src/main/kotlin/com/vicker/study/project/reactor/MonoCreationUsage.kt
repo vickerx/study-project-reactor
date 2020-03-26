@@ -32,8 +32,8 @@ object MonoCreationUsage {
      */
     private fun justOrEmpty() {
         start("just or empty")
-        Mono.justOrEmpty("justOrEmpty hello World").subscribe(::println);
-        Mono.justOrEmpty(Optional.ofNullable("justOrEmpty hello world")).subscribe(::println);
+        Mono.justOrEmpty("justOrEmpty hello World").subscribe(::println)
+        Mono.justOrEmpty(Optional.ofNullable("justOrEmpty hello world")).subscribe(::println)
         end()
     }
 

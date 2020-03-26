@@ -3,8 +3,11 @@ package com.vicker.study.project.reactor
 import reactor.core.publisher.Flux
 import reactor.core.publisher.FluxSink
 import reactor.core.publisher.Mono
+import reactor.core.publisher.SynchronousSink
+import java.time.Duration
 import java.util.function.Supplier
 import java.util.stream.Stream
+import kotlin.random.Random
 
 object FluxCreationUsage {
 
@@ -22,11 +25,31 @@ object FluxCreationUsage {
         error()
         range()
         interval()
+        generate()
+    }
+
+    private fun generate() {
+        start("generate")
+        Flux.generate<Long> { sink ->
+            sink.next(1)
+            sink.complete()
+        }.subscribe(::println)
+        Flux.generate({
+            val random = Random(10)
+            random.nextInt(10)
+        }, { i, o: SynchronousSink<String> ->
+            o.next("next $i")
+            o.complete()
+            i
+        }).subscribe(::println)
+        end()
     }
 
     private fun interval() {
         start("interval")
-
+        Flux.interval(Duration.ofSeconds(1)).subscribe(::println)
+        Thread.sleep(1000)
+        end()
     }
 
     private fun range() {
