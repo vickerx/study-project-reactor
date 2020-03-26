@@ -7,3 +7,7 @@ fun start(str: String) {
 fun end() {
     println("----------------------")
 }
+
+fun end(str: String): Unit {
+    println("-----------${str}-----------")
+}

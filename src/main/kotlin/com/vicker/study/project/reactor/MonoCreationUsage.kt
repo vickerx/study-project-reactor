@@ -3,10 +3,12 @@ package com.vicker.study.project.reactor
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.publisher.MonoSink
+import reactor.util.function.Tuple2
 import reactor.util.function.Tuple3
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import java.util.function.Function
 import java.util.function.Supplier
 
@@ -163,14 +165,22 @@ object MonoCreationUsage {
         Mono.zip(Mono.just(1), Mono.just("2"), Mono.just(true))
                 .doOnSuccess { tuple: Tuple3<Int, String, Boolean> -> println(tuple) }.subscribe(::println)
         Mono.zip(Mono.fromFuture { CompletableFuture.supplyAsync { 1 } }, Mono.just("aaa")).subscribe(::println)
-
         Mono.zip(Function<Array<Any>, Data> { a: Array<Any> ->
-            Data(a[0] as String, a[1] as Int, a[2] as Boolean, a[3] as Long)
-        }, Mono.just("zhang san"), Mono.just(18), Mono.just(true), Mono.empty<Long>()).subscribe(::println)
+            Data(a[0] as String, a[1] as Int, a[2] as Boolean)
+        }, Mono.just("zhang san"), Mono.just(18), Mono.just(true)).subscribe(::println)
+        Mono.zip(Mono.empty<Long>(), Mono.just("aaa")).doOnSuccess(object : Consumer<Tuple2<Long?, String?>?> {
+            override fun accept(t: Tuple2<Long?, String?>?) {
+                println("do On Success $t")
+            }
+        }).map { t ->
+            println("flat map $t")
+            t
+        }.subscribe(::println)
+
         end()
     }
 
-    data class Data(val name: String, val age: Int, val gender: Boolean, val amount: Long?)
+    data class Data(val name: String, val age: Int, val gender: Boolean, val amount: Long? = 1)
 
     private fun never() {
         start("never")

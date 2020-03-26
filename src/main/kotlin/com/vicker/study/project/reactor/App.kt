@@ -12,5 +12,10 @@ class App {
 
 fun main(args: Array<String>) {
     println(App().greeting)
+    start("mono")
     MonoCreationUsage.execute()
+    end()
+    start("flux")
+    FluxCreationUsage.execute()
+    end()
 }
