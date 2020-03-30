@@ -18,4 +18,7 @@ fun main(args: Array<String>) {
     start("flux")
     FluxCreationUsage.execute()
     end()
+    start("mono operators")
+    MonoOperatorUsage.execute()
+    end()
 }
